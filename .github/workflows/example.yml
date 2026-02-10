@@ -1,0 +1,74 @@
+name: Example Usage
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+  issue_comment:
+    types: [created]
+
+jobs:
+  # Example 1: Welcome new issues
+  welcome-issue:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create welcome comment
+        uses: actions-cool/issues-helper-skill@v1
+        with:
+          actions: 'create-comment'
+          body: |
+            Hello @${{ github.event.issue.user.login }}! 👋
+            
+            Thank you for opening this issue. A maintainer will review it soon.
+          emoji: '+1,heart'
+      
+      - name: Add initial labels
+        uses: actions-cool/issues-helper-skill@v1
+        with:
+          actions: 'add-labels'
+          labels: 'needs-triage'
+
+  # Example 2: Handle labeled issues
+  handle-bug-label:
+    if: github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'bug'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign to bug team
+        uses: actions-cool/issues-helper-skill@v1
+        with:
+          actions: 'add-assignees,create-comment'
+          assignees: 'bug-team-member'
+          body: 'This bug has been assigned to our bug team for investigation.'
+
+  # Example 3: Check issue content
+  check-issue-format:
+    if: github.event_name == 'issues' && github.event.action == 'edited'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if issue has required info
+        uses: actions-cool/issues-helper-skill@v1
+        id: check
+        with:
+          actions: 'check-issue'
+          title-includes: 'bug,feature'
+          body-includes: 'description'
+      
+      - name: Comment if check fails
+        if: steps.check.outputs.check-result == 'false'
+        uses: actions-cool/issues-helper-skill@v1
+        with:
+          actions: 'create-comment,add-labels'
+          body: 'Please ensure your issue includes all required information.'
+          labels: 'needs-info'
+
+  # Example 4: React to comments
+  react-to-comments:
+    if: github.event_name == 'issue_comment'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add reaction
+        uses: actions-cool/issues-helper-skill@v1
+        with:
+          actions: 'update-comment'
+          comment-id: ${{ github.event.comment.id }}
+          emoji: 'eyes'

@@ -11,6 +11,8 @@ jobs:
   welcome-issue:
     if: github.event_name == 'issues' && github.event.action == 'opened'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Create welcome comment
         uses: actions-cool/issues-helper-skill@v1
@@ -32,6 +34,8 @@ jobs:
   handle-bug-label:
     if: github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'bug'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Assign to bug team
         uses: actions-cool/issues-helper-skill@v1
@@ -44,6 +48,8 @@ jobs:
   check-issue-format:
     if: github.event_name == 'issues' && github.event.action == 'edited'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Check if issue has required info
         uses: actions-cool/issues-helper-skill@v1
@@ -65,6 +71,8 @@ jobs:
   acknowledge-comments:
     if: github.event_name == 'issue_comment'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Create acknowledgment
         uses: actions-cool/issues-helper-skill@v1

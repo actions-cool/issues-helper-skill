@@ -1,0 +1,291 @@
+name: 'Issues Helper Skill'
+description: '🛠 A skill that allows you to quickly use all the features of issues-helper'
+author: 'actions-cool'
+branding:
+  icon: 'aperture'
+  color: 'orange'
+
+inputs:
+  # Required
+  actions:
+    description: 'Action type to perform'
+    required: true
+  
+  # Token
+  token:
+    description: 'GitHub token for authentication'
+    required: false
+    default: ${{ github.token }}
+  
+  # Issue parameters
+  issue-number:
+    description: 'The issue number to operate on'
+    required: false
+  
+  # Content parameters
+  title:
+    description: 'Title for issue operations'
+    required: false
+  
+  body:
+    description: 'Body content for issue/comment operations'
+    required: false
+  
+  # Labels
+  labels:
+    description: 'Labels to add, remove, or set'
+    required: false
+  
+  label-name:
+    description: 'Label name for create-label action'
+    required: false
+  
+  label-color:
+    description: 'Label color in hex format (without #)'
+    required: false
+  
+  label-desc:
+    description: 'Label description'
+    required: false
+  
+  # Assignees
+  assignees:
+    description: 'Assignees to add or remove'
+    required: false
+  
+  random-to:
+    description: 'Random assignee selection count'
+    required: false
+  
+  # State and mode parameters
+  state:
+    description: 'Issue state (open/closed)'
+    required: false
+  
+  update-mode:
+    description: 'Update mode (replace/append)'
+    required: false
+    default: 'replace'
+  
+  close-reason:
+    description: 'Reason for closing (not_planned/completed)'
+    required: false
+  
+  # Lock parameters
+  lock-reason:
+    description: 'Reason for locking issue'
+    required: false
+  
+  # Comment parameters
+  comment-id:
+    description: 'Comment ID for operations'
+    required: false
+  
+  out-comments:
+    description: 'Output from find-comments action'
+    required: false
+  
+  # Emoji
+  emoji:
+    description: 'Emoji reactions to add'
+    required: false
+  
+  # Filtering parameters
+  issue-state:
+    description: 'Filter by issue state'
+    required: false
+  
+  issue-assignee:
+    description: 'Filter by assignee'
+    required: false
+  
+  issue-creator:
+    description: 'Filter by creator'
+    required: false
+  
+  issue-mentioned:
+    description: 'Filter by mentioned user'
+    required: false
+  
+  body-includes:
+    description: 'Filter by body content'
+    required: false
+  
+  title-includes:
+    description: 'Filter by title content'
+    required: false
+  
+  title-excludes:
+    description: 'Exclude title patterns'
+    required: false
+  
+  comment-auth:
+    description: 'Filter comments by author'
+    required: false
+  
+  # Inactive parameters
+  inactive-day:
+    description: 'Days of inactivity threshold'
+    required: false
+  
+  inactive-mode:
+    description: 'Inactive detection mode'
+    required: false
+  
+  inactive-label:
+    description: 'Label to add for inactive issues'
+    required: false
+  
+  # Exclude parameters
+  exclude-labels:
+    description: 'Labels to exclude from filtering'
+    required: false
+  
+  exclude-issue-numbers:
+    description: 'Issue numbers to exclude'
+    required: false
+  
+  # Check parameters
+  assignee-includes:
+    description: 'Check if assignees include certain users'
+    required: false
+  
+  # Direction
+  direction:
+    description: 'Sort direction (asc/desc)'
+    required: false
+  
+  # Commands for mark actions
+  assign-command:
+    description: 'Command for mark-assignees action'
+    required: false
+  
+  duplicate-command:
+    description: 'Command for mark-duplicate action'
+    required: false
+  
+  duplicate-labels:
+    description: 'Labels for duplicate issues'
+    required: false
+  
+  remove-labels:
+    description: 'Labels to remove from duplicate'
+    required: false
+  
+  labels-replaced:
+    description: 'Labels to replace'
+    required: false
+  
+  close-issue:
+    description: 'Whether to close duplicate issue'
+    required: false
+  
+  # Permissions
+  require-permission:
+    description: 'Required permission level'
+    required: false
+  
+  # Contents
+  contents:
+    description: 'Contents for toggle-labels'
+    required: false
+  
+  # Find issues
+  create-issue-if-not-exist:
+    description: 'Create issue if not found'
+    required: false
+
+outputs:
+  # Common outputs
+  comment-id:
+    description: 'ID of created/updated comment'
+    value: ${{ steps.issues-helper.outputs.comment-id }}
+  
+  issue-number:
+    description: 'Number of created/found issue'
+    value: ${{ steps.issues-helper.outputs.issue-number }}
+  
+  # Get issue outputs
+  issue-title:
+    description: 'Title of the issue'
+    value: ${{ steps.issues-helper.outputs.issue-title }}
+  
+  issue-body:
+    description: 'Body of the issue'
+    value: ${{ steps.issues-helper.outputs.issue-body }}
+  
+  issue-labels:
+    description: 'Labels of the issue'
+    value: ${{ steps.issues-helper.outputs.issue-labels }}
+  
+  issue-assignees:
+    description: 'Assignees of the issue'
+    value: ${{ steps.issues-helper.outputs.issue-assignees }}
+  
+  issue-state:
+    description: 'State of the issue'
+    value: ${{ steps.issues-helper.outputs.issue-state }}
+  
+  # Check result
+  check-result:
+    description: 'Result of check-issue action'
+    value: ${{ steps.issues-helper.outputs.check-result }}
+  
+  # Find outputs
+  comments:
+    description: 'Array of found comments'
+    value: ${{ steps.issues-helper.outputs.comments }}
+  
+  issues:
+    description: 'Array of found issues'
+    value: ${{ steps.issues-helper.outputs.issues }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run Issues Helper
+      id: issues-helper
+      uses: actions-cool/issues-helper@v3
+      with:
+        actions: ${{ inputs.actions }}
+        token: ${{ inputs.token }}
+        issue-number: ${{ inputs.issue-number }}
+        title: ${{ inputs.title }}
+        body: ${{ inputs.body }}
+        labels: ${{ inputs.labels }}
+        label-name: ${{ inputs.label-name }}
+        label-color: ${{ inputs.label-color }}
+        label-desc: ${{ inputs.label-desc }}
+        assignees: ${{ inputs.assignees }}
+        random-to: ${{ inputs.random-to }}
+        state: ${{ inputs.state }}
+        update-mode: ${{ inputs.update-mode }}
+        close-reason: ${{ inputs.close-reason }}
+        lock-reason: ${{ inputs.lock-reason }}
+        comment-id: ${{ inputs.comment-id }}
+        out-comments: ${{ inputs.out-comments }}
+        emoji: ${{ inputs.emoji }}
+        issue-state: ${{ inputs.issue-state }}
+        issue-assignee: ${{ inputs.issue-assignee }}
+        issue-creator: ${{ inputs.issue-creator }}
+        issue-mentioned: ${{ inputs.issue-mentioned }}
+        body-includes: ${{ inputs.body-includes }}
+        title-includes: ${{ inputs.title-includes }}
+        title-excludes: ${{ inputs.title-excludes }}
+        comment-auth: ${{ inputs.comment-auth }}
+        inactive-day: ${{ inputs.inactive-day }}
+        inactive-mode: ${{ inputs.inactive-mode }}
+        inactive-label: ${{ inputs.inactive-label }}
+        exclude-labels: ${{ inputs.exclude-labels }}
+        exclude-issue-numbers: ${{ inputs.exclude-issue-numbers }}
+        assignee-includes: ${{ inputs.assignee-includes }}
+        direction: ${{ inputs.direction }}
+        assign-command: ${{ inputs.assign-command }}
+        duplicate-command: ${{ inputs.duplicate-command }}
+        duplicate-labels: ${{ inputs.duplicate-labels }}
+        remove-labels: ${{ inputs.remove-labels }}
+        labels-replaced: ${{ inputs.labels-replaced }}
+        close-issue: ${{ inputs.close-issue }}
+        require-permission: ${{ inputs.require-permission }}
+        contents: ${{ inputs.contents }}
+        create-issue-if-not-exist: ${{ inputs.create-issue-if-not-exist }}

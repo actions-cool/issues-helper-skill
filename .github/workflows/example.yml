@@ -61,14 +61,14 @@ jobs:
           body: 'Please ensure your issue includes all required information.'
           labels: 'needs-info'
 
-  # Example 4: React to comments
-  react-to-comments:
+  # Example 4: Acknowledge comments
+  acknowledge-comments:
     if: github.event_name == 'issue_comment'
     runs-on: ubuntu-latest
     steps:
-      - name: Add reaction
+      - name: Create acknowledgment
         uses: actions-cool/issues-helper-skill@v1
         with:
-          actions: 'update-comment'
-          comment-id: ${{ github.event.comment.id }}
+          actions: 'create-comment'
+          body: 'Thank you for your comment! We will review it shortly.'
           emoji: 'eyes'

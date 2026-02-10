@@ -147,7 +147,7 @@ jobs:
         uses: actions-cool/issues-helper-skill@v1
         with:
           actions: 'create-issue'
-          title: 'Monthly Report - ${{ github.event.repository.updated_at }}'
+          title: 'Monthly Report'
           body: 'This is the monthly report issue'
           labels: 'report,monthly'
 ```
